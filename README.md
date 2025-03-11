@@ -7,6 +7,10 @@ NumPy & Pandas for efficient data management. This system will allow administrat
 ```bash
 git clone https://github.com/Weiyang-code/programming-for-computer-science-assignment.git
 ```
+2. Installation
+```shell
+pip install pandas
+```
 ## Run
 ```shell
 python main.py

@@ -1,6 +1,5 @@
 class Person:
 
-    def __init__(self, name, contact, email):
+    def __init__(self, name, password):
         self.name = name
-        self.contact = contact
-        self.email = email
+        self.password = password

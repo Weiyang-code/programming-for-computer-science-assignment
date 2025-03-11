@@ -1,14 +1,9 @@
-from person import Person
+from classes.person import Person
 
 class Teacher(Person):
     
-    def __init__(self, name, employee_id, email, contact, salary, subject_classes):
-        super().__init__(name, email, contact)
-        self.employee_id = employee_id
-        self.email = email
-        self.contact = contact
-        self.salary = salary
-        self.subject_classes = {}
+    def __init__(self, name, password):
+        super().__init__(name, password)
 
     def mark_attendance():
         pass

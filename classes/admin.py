@@ -1,6 +1,9 @@
-from person import Person
+from classes.person import Person
 
 class Admin(Person):
+
+    def __init__(self, name, password):
+        super().__init__(name, password)
     
     def add_employee():
         pass  

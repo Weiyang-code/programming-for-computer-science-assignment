@@ -1,5 +1,5 @@
 from classes.school import School
 
-school1 = School()
+school = School()
 
-school1.menu()
+school.menu()

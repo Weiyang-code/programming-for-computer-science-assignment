@@ -38,6 +38,8 @@ class School:
 
                 if opt =='1':
                     while True:
+                        print("Employee Management Menu:")
+                        print()
                         print("1. Add Employee")
                         print("2. Remove Employee")
                         print("3. Update Employee")
@@ -64,6 +66,8 @@ class School:
 
                 elif opt == '2':
                     while True:
+                        print("Student Management Menu:")
+                        print()
                         print("1. Add Student")
                         print("2. Remove Student")
                         print("3. Update Student")
@@ -90,6 +94,8 @@ class School:
 
                 elif opt == '3':
                     while True:
+                        print("Class and Schedule Management Menu:")
+                        print()
                         print("1. Schedule Class")
                         print("2. Generate Reports")
                         print("3. Generate Statistical Insights")
@@ -121,7 +127,7 @@ class School:
                 print()
                 print("Teacher Menu: ")
                 print()
-                print("1. Attedance Management")
+                print("1. Attendance Management")
                 print("2. Student Assessment & Grading")
                 print("3. Profile & Task Management")
                 print("4. Exit")
@@ -131,6 +137,8 @@ class School:
 
                 if opt == '1':
                     while True:
+                        print("Attendance Management Menu:")
+                        print()
                         print("1. Mark Attendance")
                         print("2. View Attendance Reports")
                         print("3. Back to Teacher Menu")
@@ -149,6 +157,8 @@ class School:
 
                 elif opt =='2':
                     while True:
+                        print("Student Assessment & Grading Menu:")
+                        print()
                         print("1. Add Student Marks")
                         print("2. Update Student Marks")
                         print("3. Generate Performance Analytics")
@@ -171,6 +181,8 @@ class School:
 
                 elif opt == '3':
                     while True:
+                        print("Profile & Task Management Menu: ")
+                        print()
                         print("1. Update Teacher Profile")
                         print("2. Manage Class Schedules")
                         print("3. Create Lesson Plans")

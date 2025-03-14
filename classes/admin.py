@@ -120,17 +120,96 @@ class Admin(Person):
         print(employee_list.to_string())
         print()        
 
-    def add_student():
-        pass
+    def add_student(self):
+        existing_data = pd.read_csv('data/student.csv', dtype={'student_id': str, 'age': int})  
 
-    def remove_student():
-        pass
+        while True:
+            student_id = input("Enter Student ID: ")
+            
+            if student_id in existing_data['student_id'].values:
+                print(f"ERROR: Student ID {student_id} already exists! Try again.")
+            else:
+                break
 
-    def update_student():
-        pass
+        name = input("Enter Student Name: ")
+        email = input("Enter Student Email: ")
+        contact = input("Enter Student Contact: ")
+        class_name = (input("Enter Student Class: ")) 
+        age = input("Enter Student Age: ")
 
-    def view_student():
-        pass
+        new_data = {
+            'student_id': [student_id], 
+            'name': [name],
+            'email': [email], 
+            'contact': [contact], 
+            'class_name': [class_name], 
+            'age': [age]
+        }
+
+        student_info = pd.DataFrame(new_data)
+
+        student_info.to_csv('data/student.csv', mode='a', header=False, index=False)
+
+        print("Student information successfully added!")
+        print()
+
+    def remove_student(self):
+        data = pd.read_csv('data/student.csv', dtype= {'student_id': str}) 
+
+        while True:
+            student_id = input("Enter Student ID: ")
+            
+            if student_id not in data['student_id'].values:
+                print(f"ERROR: Student ID {student_id} does not exist! Try again.")
+            else:
+                break
+
+        data = data[data['student_id'] != student_id] 
+
+        data.to_csv('data/student.csv', index = False)
+
+        print("Student successfully removed!")
+        print()
+
+    def update_student(self):
+        existing_data = pd.read_csv('data/student.csv', dtype={'contact': str, 'age': int}) 
+
+        existing_data['student_id'] = existing_data['student_id'].astype(str)
+
+        while True:
+            student_id = input("Enter Student ID: ")
+            
+            if student_id not in existing_data['student_id'].values:
+                print(f"ERROR Student ID {student_id} does not exist! Try again.")
+            else:
+                break
+        
+        student_index = existing_data[existing_data['student_id'] == student_id].index[0]
+        
+        print(f"Enter new details for student,{student_id} (press Enter to keep existing values)")
+        print()
+
+        name = input("Enter New Student Name: ") or existing_data.loc[student_index, 'name']
+        email = input("Enter New Student Email: ") or existing_data.loc[student_index, 'email']
+        contact = input("Enter New Student Contact: ") or existing_data.loc[student_index, 'contact']
+        class_name = input("Enter New Student Class Name: ") or existing_data.loc[student_index, 'class_name']
+        age = input("Enter Student age: ") or existing_data.loc[student_index, 'age']
+        
+        existing_data.loc[student_index, 'name'] = name
+        existing_data.loc[student_index, 'email'] = email
+        existing_data.loc[student_index, 'contact'] = contact
+        existing_data.loc[student_index, 'class_name'] = class_name
+        existing_data.loc[student_index, 'age'] = age
+
+        existing_data.to_csv("data/student.csv", index=False)
+
+        print("Student information successfully updated!")
+        print()
+
+    def view_student(self):
+        student_list = pd.read_csv('data/student.csv', dtype = {'contact' : str})    
+        print(student_list.to_string())
+        print()  
 
     def schedule_class():
         pass

@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from classes.person import Person
 
@@ -211,11 +212,84 @@ class Admin(Person):
         print(student_list.to_string())
         print()  
 
-    def schedule_class():
+    def schedule_class(self):
+        class_name = input("Enter Class:")
+        day = input("Enter the day of the class schedule: (Monday/Tuesday/Wednesday/Thursday/Friday)")
+
+        timeslot1 = "8am - 9am"
+        timeslot2 = "9am - 10am"
+        timeslot3 = "10am - 11am"
+        timeslot4 = "11am - 12pm"
+        timeslot5 = "12pm - 1pm"
+
+        if os.path.exists(f"data/{class_name} - {day}.csv"):
+            existing_data = pd.read_csv(f"data/{class_name} - {day}.csv")
+
+            while True:
+                timeslot1_index = existing_data[existing_data['timeslot'] == timeslot1].index[0]
+                timeslot2_index = existing_data[existing_data['timeslot'] == timeslot2].index[0]
+                timeslot3_index = existing_data[existing_data['timeslot'] == timeslot3].index[0]
+                timeslot4_index = existing_data[existing_data['timeslot'] == timeslot4].index[0]
+                timeslot5_index = existing_data[existing_data['timeslot'] == timeslot5].index[0]
+            
+                timeslot1_subject = input("Enter the subject for timeslot (8am - 9am): ") or existing_data.loc[timeslot1_index, 'subject']
+                timeslot1_teacher = input("Enter the teacher for timeslot (8am - 9am): ") or existing_data.loc[timeslot1_index, 'teacher']
+                timeslot2_subject = input("Enter the subject for timeslot (9am - 10am): ") or existing_data.loc[timeslot2_index, 'subject']
+                timeslot2_teacher = input("Enter the teacher for timeslot (9am - 10am): ") or existing_data.loc[timeslot2_index, 'teacher']
+                timeslot3_subject = input("Enter the subject for timeslot (10am - 11am): ") or existing_data.loc[timeslot3_index, 'subject']
+                timeslot3_teacher = input("Enter the teacher for timeslot (10am - 11am): ") or existing_data.loc[timeslot3_index, 'teacher']
+                timeslot4_subject = input("Enter the subject for timeslot (11am - 12pm): ") or existing_data.loc[timeslot4_index, 'subject']
+                timeslot4_teacher = input("Enter the teacher for timeslot (11am - 12pm): ") or existing_data.loc[timeslot4_index, 'teacher']
+                timeslot5_subject = input("Enter the subject for timeslot (12pm - 1pm): ") or existing_data.loc[timeslot5_index, 'subject']
+                timeslot5_teacher = input("Enter the teacher for timeslot (12pm - 1pm): ") or existing_data.loc[timeslot5_index, 'teacher']
+
+                existing_data.loc[timeslot1_index, 'subject'] = timeslot1_subject
+                existing_data.loc[timeslot1_index, 'teacher'] = timeslot1_teacher
+                existing_data.loc[timeslot2_index, 'subject'] = timeslot2_subject
+                existing_data.loc[timeslot2_index, 'teacher'] = timeslot2_teacher
+                existing_data.loc[timeslot3_index, 'subject'] = timeslot3_subject
+                existing_data.loc[timeslot3_index, 'teacher'] = timeslot3_teacher
+                existing_data.loc[timeslot4_index, 'subject'] = timeslot4_subject
+                existing_data.loc[timeslot4_index, 'teacher'] = timeslot4_teacher
+                existing_data.loc[timeslot5_index, 'subject'] = timeslot5_subject
+                existing_data.loc[timeslot5_index, 'teacher'] = timeslot5_teacher
+
+                existing_data.to_csv(f"data/{class_name} - {day}.csv", index=False)
+
+                print("Class schedule successfully updated!")
+                print()
+
+                break
+
+        else:
+            pd.DataFrame(columns=['timeslot', 'subject', 'teacher']).to_csv(f"data/{class_name} - {day}.csv", index=False)
+
+            timeslot1_subject = input("Enter the subject for timeslot (8am - 9am): ")
+            timeslot1_teacher = input("Enter the teacher for timeslot (8am - 9am): ")
+            timeslot2_subject = input("Enter the subject for timeslot (9am - 10am): ")
+            timeslot2_teacher = input("Enter the teacher for timeslot (9am - 10am): ")
+            timeslot3_subject = input("Enter the subject for timeslot (10am - 11am): ")
+            timeslot3_teacher = input("Enter the teacher for timeslot (10am - 11am): ")
+            timeslot4_subject = input("Enter the subject for timeslot (11am - 12pm): ")
+            timeslot4_teacher = input("Enter the teacher for timeslot (11am - 12pm): ")
+            timeslot5_subject = input("Enter the subject for timeslot (12pm - 1pm): ")
+            timeslot5_teacher = input("Enter the teacher for timeslot (12pm - 1pm): ")
+
+            new_data = {
+            'timeslot': [timeslot1, timeslot2, timeslot3, timeslot4, timeslot5], 
+            'subject': [timeslot1_subject, timeslot2_subject, timeslot3_subject, timeslot4_subject, timeslot5_subject],
+            'teacher': [timeslot1_teacher, timeslot2_teacher, timeslot3_teacher, timeslot4_teacher, timeslot5_teacher], 
+            }
+
+            schedule_info = pd.DataFrame(new_data)
+
+            schedule_info.to_csv(f"data/{class_name} - {day}.csv", index=False)
+
+            print(f"Schedule for {class_name} on {day} succesfully created!")
+            print()
+
+    def generate_reports(self):
         pass
 
-    def generate_reports():
-        pass
-
-    def generate_stats():
+    def generate_stats(self):
         pass

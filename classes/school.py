@@ -10,6 +10,9 @@ class School:
         employee_path = 'employee.csv'
         student_path = 'student.csv'
 
+        if not os.path.exists("data"):
+            os.makedirs("data")
+
         if os.path.exists(f"data/{employee_path}"):
             pass
         else:

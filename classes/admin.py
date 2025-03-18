@@ -345,44 +345,67 @@ class Admin(Person):
         if student_id not in student_data['student_id'].values:
             print("ERROR: Class not found.")
             return
+        
+        print("Generate Statistics for:")
+        print()
+        print("1. Attendance")
+        print("2. Academics")
+        print()
+        stats_option = input("Select an option (1 to 2): ")
 
-        year = input("Enter the year: ").strip()
-        semester = input("Enter the semester (1, 2, 3): ").strip()
+        if stats_option  == "1":
+            attendance_file = f"data/report/attendance/{student_id}.csv"
 
-        marks_file = f"data/report/performance/{student_id} - semester {1} - {year}.csv"
+            if not os.path.exists(attendance_file):
+                print("ERROR: Marks file not found.")
+                return
+            
+            attendance_data = pd.read_csv(attendance_file, dtype={'date': str, 'attendance': str})
 
-        if not os.path.exists(marks_file):
-            print("ERROR: Marks file not found.")
-            return
+            total_classes = len(attendance_data)
 
-        marks_data = pd.read_csv(marks_file, dtype={'subject': str, 'marks': float})
+            attended_classes = (attendance_data['attendance'].str.lower() == 'yes').sum()
 
-        class_marks = marks_data['marks'].to_numpy()
+            attendance_percentage = (attended_classes / total_classes) * 100 if total_classes > 0 else 0
 
-    # Compute performance statistics
-        avg_marks = np.mean(class_marks)
-        std_dev = np.std(class_marks)
-        highest_mark = np.max(class_marks)
-        lowest_mark = np.min(class_marks)
+            print(f"Attendance Percentage: {attendance_percentage:.2f}%")
+        
+        elif stats_option == "2":
+            year = input("Enter the year: ").strip()
+            semester = input("Enter the semester (1, 2, 3): ").strip()
 
-        # Grade Distribution
-        grade_A = np.sum(class_marks >= 80)
-        grade_B = np.sum((class_marks >= 70) & (class_marks < 80))
-        grade_C = np.sum((class_marks >= 60) & (class_marks < 70))
-        grade_D = np.sum((class_marks >= 50) & (class_marks < 60))
-        grade_F = np.sum(class_marks < 50)
+            marks_file = f"data/report/performance/{student_id} - semester {1} - {year}.csv"
 
-        # Display results
-        print("\nClass Performance Analytics:")
-        print(f" Student: {student_id}")
-        print(f" Year: {year} | Semester: {semester}")
-        print(f" Average Marks: {avg_marks:.2f}")
-        print(f" Standard Deviation: {std_dev:.2f}")
-        print(f" Highest Mark: {highest_mark}")
-        print(f" Lowest Mark: {lowest_mark}")
-        print(" Grade Distribution:")
-        print(f"   A (80+): {grade_A}")
-        print(f"   B (70-79): {grade_B}")
-        print(f"   C (60-69): {grade_C}")
-        print(f"   D (50-59): {grade_D}")
-        print(f"   F (<50): {grade_F}\n")
+            if not os.path.exists(marks_file):
+                print("ERROR: Performance report not found.")
+                return
+
+            marks_data = pd.read_csv(marks_file, dtype={'subject': str, 'marks': float})
+
+            class_marks = marks_data['marks'].to_numpy()
+
+            avg_marks = np.mean(class_marks)
+            std_dev = np.std(class_marks)
+            highest_mark = np.max(class_marks)
+            lowest_mark = np.min(class_marks)
+
+            grade_A = np.sum(class_marks >= 80)
+            grade_B = np.sum((class_marks >= 70) & (class_marks < 80))
+            grade_C = np.sum((class_marks >= 60) & (class_marks < 70))
+            grade_D = np.sum((class_marks >= 50) & (class_marks < 60))
+            grade_F = np.sum(class_marks < 50)
+
+            # Display results
+            print("\nClass Performance Analytics:")
+            print(f" Student: {student_id}")
+            print(f" Year: {year} | Semester: {semester}")
+            print(f" Average Marks: {avg_marks:.2f}")
+            print(f" Standard Deviation: {std_dev:.2f}")
+            print(f" Highest Mark: {highest_mark}")
+            print(f" Lowest Mark: {lowest_mark}")
+            print(" Grade Distribution:")
+            print(f"   A (80+): {grade_A}")
+            print(f"   B (70-79): {grade_B}")
+            print(f"   C (60-69): {grade_C}")
+            print(f"   D (50-59): {grade_D}")
+            print(f"   F (<50): {grade_F}\n")

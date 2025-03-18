@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from classes.person import Person
+import numpy as np
 
 class Teacher(Person):
     
@@ -81,10 +82,73 @@ class Teacher(Person):
                 print(f"Attendance record for {class_name} on {date} does not exist!")
 
     def add_student_marks(self):
-        pass
+        existing_data = pd.read_csv('data/student.csv', dtype={'student_id': str,}) 
+        existing_data['student_id'] = existing_data['student_id'].astype(str)
+
+        year = int(input("Enter the year: "))
+        semester = input("Enter the semester (1, 2, 3): ")
+        subject = input("Enter the subject: ")
+
+        if not os.path.exists("data/marks"):
+            os.makedirs("data/marks")     
+                    
+        pd.DataFrame(columns=['student_id', 'marks']).to_csv(f"data/marks/semester {semester} - {year} - {subject}.csv", index=False)        
+        existing_data = pd.read_csv(f"data/marks/semester {semester} - {year} - {subject}.csv", dtype={'student_id': str, 'marks': str})
+        while True:
+
+            student_id = input("Enter Student ID: ")
+            if student_id in existing_data['student_id'].values:
+                print(f"ERROR: Student ID {student_id} already exist.")
+
+            else:
+                break
+            
+        mark = input("Enter Student Marks: ")
+
+        new_data = {
+        'student_id': [student_id], 
+        'marks': [mark],
+        }   
+
+        mark_info = pd.DataFrame(new_data)
+
+        mark_info.to_csv(f"data/marks/semester {semester} - {year} - {subject}.csv", mode='a', header=False, index=False)
+
+        print("Student information successfully added!")
+        print()
+
+        
 
     def update_student_marks(self):
-        pass
+        year = input("Enter the year: ")
+        semester = input("Enter semester (1, 2, 3): ")
+        subject = input("Enter the subject: ")
+
+        if os.path.exists(f'data/marks/semester {semester} - {year} - {subject}.csv'):
+            existing_data = pd.read_csv(f'data/marks/semester {semester} - {year} - {subject}.csv', dtype={'student_id': str,})
+
+            while True:
+                student_id = input("Enter student ID: ")
+
+                if student_id not in existing_data['student_id'].values:
+                    print(f"ERROR: Student ID {student_id} does not exist! Try again.")
+                    continue
+
+                mark_index = existing_data[existing_data['student_id'] == student_id].index[0]
+
+                mark = input("Enter Student Marks: ") or existing_data.loc[mark_index, 'marks']
+
+                existing_data.loc[mark_index, 'marks'] = mark
+
+                existing_data.to_csv(f"data/marks/semester {semester} - {year} - {subject}.csv", index=False)
+
+                print("Student mark successfully updated!")
+                print()
+
+                break
+
+        else:
+            print("The file does not exist.")
 
     def generate_performance_analytics(self):
         pass

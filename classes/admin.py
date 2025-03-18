@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from classes.person import Person
+import numpy as np
 
 class Admin(Person):
 

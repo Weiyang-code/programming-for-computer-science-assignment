@@ -66,43 +66,80 @@ class Teacher(Person):
             print()
 
     def view_attendance(self):
-        print("View attendance records by entering the date and class name.")      
-        while True:
-            date = input("Enter date (eg: 5/6/2025, 27/5/2025): ").strip().replace("/", "_")
-            class_name = input("Enter class name: ")
+        print("View attendance records by students or class.")      
+        print()
+        print("1. Students")
+        print("2. Class")
+        print()
+        attendance_option = input("Select an option (1 to 2): ")
 
-            if os.path.exists(f'data/attendance/{date} - {class_name} - attendance.csv'):
-                attendance = pd.read_csv(f'data/attendance/{date} - {class_name} - attendance.csv')    
-                print(attendance.to_string())
-                print()
+        while True:
+            if attendance_option == '1':
+                student_id = input("Enter Student ID: ")
+
+                if os.path.exists(f"data/report/attendance/{student_id}.csv"):
+                    attendance = pd.read_csv(f'data/report/attendance/{student_id}.csv')
+
+                    print(attendance.to_string())
+                    print()
+
+                else:
+                    print(f"Attendance report for student {student_id} does not exist!")
 
                 break
 
+            elif attendance_option == '2':
+                while True:
+                    date = input("Enter date (eg: 5/6/2025, 27/5/2025): ").strip().replace("/", "_")
+                    class_name = input("Enter class name: ")
+
+                    if os.path.exists(f'data/attendance/{date} - {class_name} - attendance.csv'):
+                        attendance = pd.read_csv(f'data/attendance/{date} - {class_name} - attendance.csv')    
+                        print(attendance.to_string())
+                        print()
+
+                    else:
+                        print(f"Attendance record for {class_name} on {date} does not exist!")
+
+                    break
+
             else:
-                print(f"Attendance record for {class_name} on {date} does not exist!")
+                print("Invalid Option.")
+
+            break
 
     def add_student_marks(self):
-        existing_data = pd.read_csv('data/student.csv', dtype={'student_id': str,}) 
-        existing_data['student_id'] = existing_data['student_id'].astype(str)
+        existing_student_data = pd.read_csv('data/student.csv', dtype={'student_id': str,}) 
+        existing_student_data['student_id'] = existing_student_data['student_id'].astype(str)
 
         year = int(input("Enter the year: "))
         semester = input("Enter the semester (1, 2, 3): ")
         subject = input("Enter the subject: ")
 
         if not os.path.exists("data/marks"):
-            os.makedirs("data/marks")     
-                    
-        pd.DataFrame(columns=['student_id', 'marks']).to_csv(f"data/marks/semester {semester} - {year} - {subject}.csv", index=False)        
-        existing_data = pd.read_csv(f"data/marks/semester {semester} - {year} - {subject}.csv", dtype={'student_id': str, 'marks': str})
+            os.makedirs("data/marks")  
+
+        if os.path.exists(f'data/marks/semester {semester} - {year} - {subject}.csv'):   
+             pass
+        else:       
+            pd.DataFrame(columns=['student_id', 'marks']).to_csv(f"data/marks/semester {semester} - {year} - {subject}.csv", index=False)    
+
+        existing_mark_data = pd.read_csv(f"data/marks/semester {semester} - {year} - {subject}.csv", dtype={'student_id': str, 'marks': str})
+        
         while True:
 
             student_id = input("Enter Student ID: ")
-            if student_id in existing_data['student_id'].values:
-                print(f"ERROR: Student ID {student_id} already exist.")
 
-            else:
-                break
-            
+            if student_id not in existing_student_data['student_id'].values:
+                print(f"ERROR: Student ID {student_id} does not exist. Try again.")
+                continue  
+
+            if student_id in existing_mark_data['student_id'].values:
+                print(f"Student ID {student_id} already has marks recorded. Skipping...")
+                return 
+
+            break
+          
         mark = input("Enter Student Marks: ")
 
         new_data = {
@@ -117,21 +154,19 @@ class Teacher(Person):
         print("Student information successfully added!")
         print()
 
-        
-
     def update_student_marks(self):
         year = input("Enter the year: ")
         semester = input("Enter semester (1, 2, 3): ")
         subject = input("Enter the subject: ")
 
         if os.path.exists(f'data/marks/semester {semester} - {year} - {subject}.csv'):
-            existing_data = pd.read_csv(f'data/marks/semester {semester} - {year} - {subject}.csv', dtype={'student_id': str,})
+            existing_data = pd.read_csv(f'data/marks/semester {semester} - {year} - {subject}.csv', dtype={'student_id': str, 'marks': str})
 
             while True:
                 student_id = input("Enter student ID: ")
 
                 if student_id not in existing_data['student_id'].values:
-                    print(f"ERROR: Student ID {student_id} does not exist! Try again.")
+                    print(f"ERROR: Student ID {student_id} does not exist in file! Try again.")
                     continue
 
                 mark_index = existing_data[existing_data['student_id'] == student_id].index[0]

@@ -258,7 +258,85 @@ class Admin(Person):
             print()
 
     def generate_reports(self):
-        pass
+        print("1. Generate Attendance Report")
+        print("2. Generate Performance Report")
+        print()
+        report_option = input("Select an option (1 to 2): ")
+
+        existing_data = pd.read_csv('data/student.csv', dtype={'contact': str, 'age': int}) 
+
+        existing_data['student_id'] = existing_data['student_id'].astype(str)
+
+        while True:
+            if report_option == '1':
+
+                while True:
+                    student_id = input("Enter Student ID: ")
+                    
+                    if student_id not in existing_data['student_id'].values:
+                        print(f"ERROR Student ID {student_id} does not exist! Try again.")
+                    else:
+                        break
+
+                if not os.path.exists('data/report/attendance'):
+                    os.makedirs('data/report/attendance')
+
+                attendance_data = []
+
+                for filename in os.listdir('data/attendance'):
+                    file_name_section = filename.split(" - ")
+                    date = file_name_section[0]
+                    existing_data= pd.read_csv(f'data/attendance/{filename}', dtype={'student_id': str})
+
+                    student_index = existing_data[existing_data['student_id'] == student_id].index[0]
+                    
+                    attendance_value = existing_data.loc[student_index, 'attendance']
+                    attendance_data.append({'date': date, 'attendance': attendance_value})
+
+                report = pd.DataFrame(attendance_data)
+                report.to_csv(f"data/report/attendance/{student_id}.csv", index=False)
+                
+            elif report_option == '2':
+
+                while True:
+                    student_id = input("Enter Student ID: ")
+                    
+                    if student_id not in existing_data['student_id'].values:
+                        print(f"ERROR Student ID {student_id} does not exist! Try again.")
+                    else:
+                        break
+
+                year = input("Enter the year: ")
+                semester = input("Enter the semester: ")
+
+                if not os.path.exists('data/report/performance'):
+                    os.makedirs('data/report/performance')
+                
+                performance_data = []
+
+                for filename in os.listdir('data/marks'):
+                    if filename.startswith(f"semester {semester} - {year}"):
+                        file_name_section = filename.split(" - ")
+                        subject = file_name_section[2]
+                        subject_part = subject.split(".")
+                        subject_name = subject_part[0]
+                        existing_data= pd.read_csv(f'data/marks/{filename}', dtype={'student_id': str})
+
+                        student_index = existing_data[existing_data['student_id'] == student_id].index[0]
+                        
+                        subject_marks = existing_data.loc[student_index, 'marks']
+                        performance_data.append({'subject': subject_name, 'marks': subject_marks})
+
+                    else:
+                        continue
+
+                report = pd.DataFrame(performance_data)
+                report.to_csv(f"data/report/performance/{student_id} - semester {semester} - {year}.csv", index=False)
+
+            else:
+                print("Invalid option.")
+
+            break
 
     def generate_stats(self):
         pass

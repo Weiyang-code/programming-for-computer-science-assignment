@@ -5,8 +5,8 @@ import numpy as np
 
 class Teacher(Person):
     
-    def __init__(self, name, password):
-        super().__init__(name, password)
+    def __init__(self, id, password):
+        super().__init__(id, password)
 
     def mark_attendance(self):
         existing_data = pd.read_csv('data/student.csv', dtype={'contact': str, 'age': int}) 

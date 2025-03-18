@@ -5,13 +5,12 @@ import numpy as np
 
 class Admin(Person):
 
-    def __init__(self, name, password):
-        super().__init__(name, password)
+    def __init__(self, id, password):
+        super().__init__(id, password)
     
     import pandas as pd
 
     def add_employee(self):
-        # Load existing employee data
         existing_data = pd.read_csv('data/employee.csv', dtype={'employee_id': str, 'salary': int})  
 
         while True:

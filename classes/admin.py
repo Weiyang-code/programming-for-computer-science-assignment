@@ -339,4 +339,51 @@ class Admin(Person):
             break
 
     def generate_stats(self):
-        pass
+        student_data = pd.read_csv('data/student.csv', dtype={'student_id': str, 'class_name': str})
+ 
+        student_id = input("Enter the student ID: ").strip()
+
+        if student_id not in student_data['student_id'].values:
+            print("ERROR: Class not found.")
+            return
+
+        year = input("Enter the year: ").strip()
+        semester = input("Enter the semester (1, 2, 3): ").strip()
+
+        marks_file = f"data/report/performance/{student_id} - semester {1} - {year}.csv"
+
+        if not os.path.exists(marks_file):
+            print("ERROR: Marks file not found.")
+            return
+
+        marks_data = pd.read_csv(marks_file, dtype={'subject': str, 'marks': float})
+
+        class_marks = marks_data['marks'].to_numpy()
+
+    # Compute performance statistics
+        avg_marks = np.mean(class_marks)
+        std_dev = np.std(class_marks)
+        highest_mark = np.max(class_marks)
+        lowest_mark = np.min(class_marks)
+
+        # Grade Distribution
+        grade_A = np.sum(class_marks >= 80)
+        grade_B = np.sum((class_marks >= 70) & (class_marks < 80))
+        grade_C = np.sum((class_marks >= 60) & (class_marks < 70))
+        grade_D = np.sum((class_marks >= 50) & (class_marks < 60))
+        grade_F = np.sum(class_marks < 50)
+
+        # Display results
+        print("\nClass Performance Analytics:")
+        print(f" Student: {student_id}")
+        print(f" Year: {year} | Semester: {semester}")
+        print(f" Average Marks: {avg_marks:.2f}")
+        print(f" Standard Deviation: {std_dev:.2f}")
+        print(f" Highest Mark: {highest_mark}")
+        print(f" Lowest Mark: {lowest_mark}")
+        print(" Grade Distribution:")
+        print(f"   A (80+): {grade_A}")
+        print(f"   B (70-79): {grade_B}")
+        print(f"   C (60-69): {grade_C}")
+        print(f"   D (50-59): {grade_D}")
+        print(f"   F (<50): {grade_F}\n")

@@ -225,6 +225,7 @@ class Teacher(Person):
         grade_C = np.sum((class_marks >= 60) & (class_marks < 70))
         grade_D = np.sum((class_marks >= 50) & (class_marks < 60))
         grade_F = np.sum(class_marks < 50)
+        
         print("\n Class Performance Analytics:")
         print(f" Class: {class_name}")
         print(f" Subject: {subject} | Year: {year} | Semester: {semester}")

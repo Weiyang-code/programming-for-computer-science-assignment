@@ -213,11 +213,19 @@ class Admin(Person):
         print()  
 
     def schedule_class(self):
+        existing_data = pd.read_csv('data/student.csv', dtype={'class_name': str})
 
         if not os.path.exists("data/schedule"):
             os.makedirs("data/schedule")
 
-        class_name = input("Enter Class:")
+        while True:
+            class_name = input("Enter Class:")
+
+            if class_name not in existing_data['class_name'].values:
+                print("Class does not exist.")
+            else:
+                break
+
         day = input("Enter the day of the class schedule (Monday, Tuesday, Wednesday, Thursday, Friday): ")
 
         timeslot1 = "8am - 9am"
@@ -227,7 +235,7 @@ class Admin(Person):
         timeslot5 = "12pm - 1pm"
 
         if os.path.exists(f"data/schedule/{class_name} - {day}.csv"):
-            print("File already exists.")
+            print("Schedule already exists.")
 
         else:
             pd.DataFrame(columns=['timeslot', 'subject', 'teacher']).to_csv(f"data/schedule/{class_name} - {day}.csv", index=False)

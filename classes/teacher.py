@@ -18,6 +18,14 @@ class Teacher(Person):
 
         class_name = input("Enter class name: ")
 
+        while True:
+            class_name = input("Enter Class:")
+
+            if class_name not in existing_data['class_name'].values:
+                print("Class does not exist.")
+            else:
+                break
+
         filtered_students = existing_data[existing_data['class_name'] == class_name]
 
         if os.path.exists(f'data/attendance/{date} - {class_name} - attendance.csv'):
@@ -27,8 +35,6 @@ class Teacher(Person):
                 for index, student in filtered_students.iterrows():
                     student_id = student['student_id']
                     name = student['name']
-                    
-                    student_attendance = existing_data[existing_data['student_id'] == student_id]
 
                     status = input(f"Update attendance for {name} (yes/no): ").strip().lower()  or existing_data.loc[index, 'attendance']
                     

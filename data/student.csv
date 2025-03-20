@@ -1,7 +1,10 @@
-student_id,name,contact,email,class_name,age
-1002165127,Gordon,gordon@gmail.com,sim@gmail.com,5Emerald,18
-1002165128,Loh,gordon@gmail.com,sim@gmail.com,5Emerald,18
-1002165129,Wei,gordon@gmail.com,sim@gmail.com,5Emerald,18
-1002165130,Yang,gordon@gmail.com,sim@gmail.com,5Emerald,18
-
-
+student_id,name,email,contact,class_name,age
+1002165127,Gordon,gordon@gmail.com,123456789,5Emerald,18
+1002165128,Loh,gordon@gmail.com,137894450,5Emerald,18
+1002165129,Wei,gordon@gmail.com,192138876,5Emerald,18
+1002165130,Yang,wy128@gmail.com,162151556,5Emerald,18
+1002165131,Mok,mok@gmail.com,123257789,5Iron,18
+1002165132,Allyna,allyna@gmail.com,137894450,5Iron,18
+1002165133,Weiwei,weiwei988@gmail.com,192138876,5Iron,18
+1002165134,Angel,wy128@gmail.com,162151556,5Iron,18
+1002165135,JiangTao,jt122@gmail.com,162138856,5Iron,18

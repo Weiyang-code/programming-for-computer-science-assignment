@@ -270,9 +270,7 @@ class Admin(Person):
         print()
         report_option = input("Select an option (1 to 2): ")
 
-        existing_data = pd.read_csv('data/student.csv', dtype={'contact': str, 'age': int}) 
-
-        existing_data['student_id'] = existing_data['student_id'].astype(str)
+        existing_data = pd.read_csv('data/student.csv', dtype={'student_id': str, 'age': int}) 
 
         while True:
             if report_option == '1':
@@ -294,6 +292,9 @@ class Admin(Person):
                     file_name_section = filename.split(" - ")
                     date = file_name_section[0]
                     existing_data= pd.read_csv(f'data/attendance/{filename}', dtype={'student_id': str})
+
+                    if student_id not in existing_data['student_id'].values:
+                        continue 
 
                     student_index = existing_data[existing_data['student_id'] == student_id].index[0]
                     
@@ -328,6 +329,9 @@ class Admin(Person):
                         subject_part = subject.split(".")
                         subject_name = subject_part[0]
                         existing_data= pd.read_csv(f'data/marks/{filename}', dtype={'student_id': str})
+
+                        if student_id not in existing_data['student_id'].values:
+                            continue 
 
                         student_index = existing_data[existing_data['student_id'] == student_id].index[0]
                         
@@ -397,6 +401,9 @@ class Admin(Person):
             highest_mark = np.max(class_marks)
             lowest_mark = np.min(class_marks)
 
+            highest_subject = marks_data.loc[marks_data['marks'] == highest_mark, 'subject'].values[0]
+            lowest_subject = marks_data.loc[marks_data['marks'] == lowest_mark, 'subject'].values[0]
+
             grade_A = np.sum(class_marks >= 80)
             grade_B = np.sum((class_marks >= 70) & (class_marks < 80))
             grade_C = np.sum((class_marks >= 60) & (class_marks < 70))
@@ -409,8 +416,8 @@ class Admin(Person):
             print(f" Year: {year} | Semester: {semester}")
             print(f" Average Marks: {avg_marks:.2f}")
             print(f" Standard Deviation: {std_dev:.2f}")
-            print(f" Highest Mark: {highest_mark}")
-            print(f" Lowest Mark: {lowest_mark}")
+            print(f" Highest Mark: {highest_mark} ({highest_subject})")
+            print(f" Lowest Mark: {lowest_mark} ({lowest_subject})")
             print(" Grade Distribution:")
             print(f"   A (80+): {grade_A}")
             print(f"   B (70-79): {grade_B}")

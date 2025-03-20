@@ -21,7 +21,7 @@ class School:
         if os.path.exists(f"data/{student_path}"):
             pass
         else:
-            pd.DataFrame(columns=['student_id', 'name', 'contact', 'email', 'class_name', 'age']).to_csv(f"data/{student_path}", index=False)
+            pd.DataFrame(columns=['student_id', 'name', 'email', 'contact', 'class_name', 'age']).to_csv(f"data/{student_path}", index=False)
 
         user = input("Are you an admin or teacher? (Admin/Teacher): ").lower().strip()
 

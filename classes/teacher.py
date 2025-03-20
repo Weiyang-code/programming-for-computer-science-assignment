@@ -16,8 +16,6 @@ class Teacher(Person):
 
         date = input("Enter date (eg: 5/6/2025, 27/5/2025): ").strip().replace("/", "_")
 
-        class_name = input("Enter class name: ")
-
         while True:
             class_name = input("Enter Class:")
 
@@ -193,33 +191,19 @@ class Teacher(Person):
 
     def generate_performance_analytics(self):
         student_data = pd.read_csv('data/student.csv', dtype={'student_id': str, 'class_name': str})
- 
-        class_name = input("Enter the class name: ").strip()
-
-        if class_name not in student_data['class_name'].values:
-            print("ERROR: Class not found.")
-            return
-
-        class_students = student_data[student_data['class_name'] == class_name]['student_id'].tolist()
-
- 
+        subject = input("Enter the subject: ").strip()
         year = input("Enter the year: ").strip()
         semester = input("Enter the semester (1, 2, 3): ").strip()
-        subject = input("Enter the subject: ").strip()
 
         marks_file = f"data/marks/semester {semester} - {year} - {subject}.csv"
 
         if not os.path.exists(marks_file):
-            print("ERROR: Marks file not found.")
+            print("ERROR: Performance report not found.")
             return
 
         marks_data = pd.read_csv(marks_file, dtype={'student_id': str, 'marks': float})
 
-        class_marks = marks_data[marks_data['student_id'].isin(class_students)]['marks'].to_numpy()
-
-        if len(class_marks) == 0:
-            print("No marks found for this class.")
-            return
+        class_marks = marks_data['marks'].to_numpy()
 
         avg_marks = np.mean(class_marks)
         std_dev = np.std(class_marks)
@@ -231,20 +215,21 @@ class Teacher(Person):
         grade_C = np.sum((class_marks >= 60) & (class_marks < 70))
         grade_D = np.sum((class_marks >= 50) & (class_marks < 60))
         grade_F = np.sum(class_marks < 50)
-        
-        print("\n Class Performance Analytics:")
-        print(f" Class: {class_name}")
-        print(f" Subject: {subject} | Year: {year} | Semester: {semester}")
+
+            # Display results
+        print("\nSubject Performance Analytics:")
+        print(f" Year: {year} | Semester: {semester}")
         print(f" Average Marks: {avg_marks:.2f}")
         print(f" Standard Deviation: {std_dev:.2f}")
         print(f" Highest Mark: {highest_mark}")
         print(f" Lowest Mark: {lowest_mark}")
-        print(f" Grade Distribution:")
+        print(" Grade Distribution:")
         print(f"   A (80+): {grade_A}")
         print(f"   B (70-79): {grade_B}")
         print(f"   C (60-69): {grade_C}")
         print(f"   D (50-59): {grade_D}")
         print(f"   F (<50): {grade_F}\n")
+               
 
     def update_teacher_profile(self):
         existing_data = pd.read_csv('data/employee.csv', dtype={'contact': str, 'salary': int}) 
@@ -316,7 +301,7 @@ class Teacher(Person):
                     timeslot = timeslot['timeslot']
 
                     new_subject = input(f"Update subject for {timeslot}: ").strip().lower()  or existing_data.loc[index, 'subject']
-                    new_teacher = input(f"Update subject for {timeslot}: ").strip().lower()  or existing_data.loc[index, 'teacher']
+                    new_teacher = input(f"Update teacher for {timeslot}: ").strip().lower()  or existing_data.loc[index, 'teacher']
                     
                     existing_data.loc[index, 'subject'] = new_subject
                     existing_data.loc[index, 'teacher'] = new_teacher
